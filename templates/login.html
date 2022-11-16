@@ -1,0 +1,66 @@
+<body>
+Login with a username and password
+</p>
+<p>
+
+<form action="/login" method="post">
+    Username: <input id ='lalala' name="username" type="text" />
+</br>
+    Password: <input id='bababa' name="password" type="password" />
+</br>
+    <button id="b" type ='button'> hide </button>
+    <input id = 'login' value="Login" type="submit" /> 
+</form>
+
+</p>
+<script>
+
+
+
+    async function digestMessage(message) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(message);
+    const hash = await crypto.subtle.digest('SHA-256', data);
+    return hash;
+    }
+
+
+    // window.onload = console.log(document.getElementById('username').value)
+
+    document.getElementById('b').onclick = function test(){
+        str = 'test'
+        // document.getElementById('username').value += str
+        // text_username = document.getElementById('lalala').value;
+        // // console.log(text);
+        // digestMessage(text_username).then(function(data){
+        //     const hashArray = Array.from(new Uint8Array(data)); 
+        //     const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join(''); 
+        //     // console.log(decoder.decode(data))
+        //     document.getElementById('lalala').value = hashHex
+        // });
+
+        text_password = document.getElementById('bababa').value;
+        console.log(text_password)
+
+        digestMessage(text_password).then(function(data){
+            const hashArray = Array.from(new Uint8Array(data)); 
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join(''); 
+            // console.log(decoder.decode(data))
+            document.getElementById('bababa').value = hashHex
+        });
+    }
+</script>
+
+
+
+
+
+</center>
+
+
+</body>
+
+
+
+
+

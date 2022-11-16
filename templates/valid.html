@@ -1,0 +1,240 @@
+<!-- <p>This username-password combination is valid, welcome ${name}!</p> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Chat</title>
+    <style type="text/css">
+        .chat_window{
+            width:1000px;
+            height:600px;
+            border:1px solid #666;
+            margin:50px auto 0;
+            background:#600000;
+        }
+        .friend_list{
+            width:250px;
+            height:580px;
+            border:1px solid ;
+            margin:10px auto 0;
+            margin-left:10px;
+            background:#ccccb5;
+            float:left;
+        }
+        .chat_history{
+            width:700px;
+            height:540px;
+            border:1px solid #666;
+            background:#ccccb5;
+            margin:10px auto 0;
+            overflow:auto;
+            margin-right:10px;
+        }
+        .draft{
+            width:700px;
+            margin:10px auto 0;
+            float:left;
+        }
+        /* .whotalk{
+            width:80px;
+            height:200px;
+            float:left;
+            outline:none;
+        } */
+        .draft_word{
+            width:620px;
+            height:28px;
+            padding:0px;
+            /* float:left; */
+            /* margin:10px auto 0; */
+            margin-left:24px;
+            background:#ccccb5;
+            outline:none;
+            text-indent:10px;
+        }        
+        .draft_submit{
+            width:50px;
+            height:28px;
+            padding:0px;
+            float:right;
+            background:#ccccb5;
+            /* margin-right:0px; */
+        }
+        .atalk{
+           margin:10px; 
+           text-align:left;
+        }
+        .atalk span{
+            display:inline-block;
+            background:#0181cc;
+            border-radius:10px;
+            color:#fff;
+            padding:5px 10px;
+        }
+        .btalk{
+            margin:10px;
+            text-align:right;
+        }
+        .btalk span{
+            display:inline-block;
+            background:#fff;
+            border-radius:10px;
+            color:rgb(3, 3, 3);
+            padding:5px 10px;
+        }
+        .friends{
+            text-align:center;
+            display:inline-block;
+            background:#16d676;
+            border-radius:10px;
+            color:#fff;
+            padding:5px 110px;
+        }
+        .friends_header{
+            text-align:center;
+            display:inline-block;
+            background:#01331a;
+            
+            color:#fff;
+            padding:5px 100px;
+        }
+    </style>
+</head>
+
+
+
+
+
+<body>
+    <div class="chat_window">
+        <div class="friend_list" id = "friends">
+            <div  class="friends_header" id ="fh" > Friend List </div>
+            <!-- <div  onclick = "prepare()"  class="friends" id="friends"> ${friend} </div> -->
+            ${friend}
+        </div>
+        <div class="chat_history" id="chats">
+            <p>
+                ${chats} 
+            </p>
+
+        </div>
+        <div class="draft">
+            <!-- <select class="whotalk" id="who">
+                <option value="0">A说：</option>
+                <option value="1">B说：</option>
+            </select> -->
+            <form action="/valid" method="post">
+            <input type="text" name = "new_message" class="draft_word" id="draft_box">
+            <input type="submit" value="Send" class="draft_submit" id="draft_submit_button" >
+            </form>
+        </div>
+        <div id="myDiv">
+
+        </div>
+
+        <script type="text/javascript" >
+            function encodeString(string) {
+                var encoder = new TextEncoder();
+                return encoder.encode(string);
+            }
+
+            function decodeString(encoded) {
+                var decoder = new TextDecoder();
+                return decoder.decode(encoded);
+            }
+
+            function encryptString(string, key) {
+                var encoded = encodeString(string);
+                // var encoded = new Uint8Array(string);
+                var temp = crypto.subtle.encrypt(
+                    {
+                    name: "RSA-OAEP"
+                    // Other options
+                    },
+                    key,
+                    encoded
+                );
+                return temp
+            }
+
+            
+
+            function decryptString(encrypted,key) {
+            var decrypted = crypto.subtle.decrypt(
+                {
+                name: "RSA-OAEP"
+                // Other options
+                },
+                key,
+                encrypted
+            );
+
+            return decodeString(decrypted);
+            }
+
+            // Imagine you have some encrypted string `encrypted`
+
+
+
+
+
+            document.getElementById("bob").onclick = function Myf(){
+                var cptext = window.crypto.subtle.generateKey(
+                {
+                name: "RSA-OAEP",
+                modulusLength: 4096,
+                publicExponent: new Uint8Array([1, 0, 1]),
+                hash: "SHA-256"
+                },
+                true,
+                ["encrypt", "decrypt"]
+                ).then(function(data){
+                    // alert(data.publicKey)
+                    var uKey = data.publicKey
+                    var iKey = data.privateKey
+                    plaintext = "12345"
+                    console.log("明文是",plaintext)
+                    ciphertext = encryptString(plaintext, uKey)
+                    console.log(ciphertext)
+                    encryptString(plaintext, uKey).then(function func2(encrypted){
+                    console.log("密文是",encrypted) 
+
+                        // return encrypted
+                        crypto.subtle.decrypt(
+                            {
+                            name: "RSA-OAEP"
+                            // Other options
+                            },
+                            iKey,
+                            encrypted
+                        ).then(function f3(decrypted2){
+                            console.log(typeof(decrypted2));
+                            var decoder = new TextDecoder();
+                            console.log( decoder.decode(decrypted2));
+                        });
+
+                    });
+                    // .then( function func3(encrypted){
+
+                        
+
+                    //      decryptString(encrypted,iKey).then(function(string) {
+                    //     // Do something with your decrypted string
+                    //     console.log(string) 
+                    //     });
+                    // });
+                    
+
+                    
+                });      
+                      
+            }
+        </script>
+
+   
+</body>
+
+</html>
+
